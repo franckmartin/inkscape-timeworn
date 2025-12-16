@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>Fresco Texture</name>
+    <id>org.custom.fresco_texture</id>
+    
+    <label appearance="header">Object parameters</label>
+    <param name="size_min" type="float" min="0.1" max="20" gui-text="  Minimum size (mm):">0.5</param>
+    <param name="size_max" type="float" min="0.1" max="50" gui-text="  Maximum size (mm):">3.0</param>
+    <param name="shape_type" type="optiongroup" appearance="combo" gui-text="  Shape type:">
+        <option value="organic">Organic blobs</option>
+        <option value="angular">Angular fragments</option>
+        <option value="mixed">Mixed</option>
+    </param>
+    <param name="irregularity" type="int" min="0" max="100" gui-text="  Irregularity (%):">50</param>
+    
+    <spacer/>
+    <label appearance="header">Distribution parameters</label>
+    <param name="density" type="int" min="10" max="1000" gui-text="  Density (number):">200</param>
+    <param name="clustering" type="int" min="0" max="100" gui-text="  Clustering (%):">30</param>
+    <param name="num_clusters" type="int" min="1" max="20" gui-text="  Number of clusters:">5</param>
+    
+    <spacer/>
+    <label appearance="header">Elongation parameters</label>
+    <param name="elongation" type="float" min="1.0" max="5.0" gui-text="  Factor:">1.5</param>
+    <param name="elongation_variation" type="int" min="0" max="100" gui-text="  Factor variation (%):">30</param>
+    <param name="elongation_angle" type="float" min="0" max="360" gui-text="  Angle (°):">45</param>
+    <param name="angle_variation" type="int" min="0" max="100" gui-text="  Angle variation (%):">30</param>
+    
+    <effect>
+        <object-type>path</object-type>
+        <effects-menu>
+            <submenu name="Render"/>
+        </effects-menu>
+    </effect>
+    
+    <script>
+        <command location="inx" interpreter="python">fresco_texture.py</command>
+    </script>
+</inkscape-extension>
