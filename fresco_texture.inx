@@ -13,13 +13,11 @@
     </param>
     <param name="irregularity" type="int" min="0" max="100" gui-text="  Irregularity (%):">50</param>
     
-    <spacer/>
     <label appearance="header">Distribution parameters</label>
     <param name="density" type="int" min="10" max="1000" gui-text="  Density (number):">200</param>
     <param name="clustering" type="int" min="0" max="100" gui-text="  Clustering (%):">30</param>
     <param name="num_clusters" type="int" min="1" max="20" gui-text="  Number of clusters:">5</param>
     
-    <spacer/>
     <label appearance="header">Elongation parameters</label>
     <param name="elongation" type="float" min="1.0" max="5.0" gui-text="  Factor:">1.5</param>
     <param name="elongation_variation" type="int" min="0" max="100" gui-text="  Factor variation (%):">30</param>

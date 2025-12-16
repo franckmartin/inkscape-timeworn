@@ -13,42 +13,61 @@ A parametric texture generator for Inkscape that creates weathered fresco effect
 
 ## Installation
 
-### Method 1: Symbolic Links (Recommended for Development)
+### For Snap Version of Inkscape
+
+**Note**: Snap has security restrictions that prevent symbolic links from working. Files must be copied directly.
 
 ```bash
 # Clone or download to your preferred location
 cd ~/Code/Inkscape
 git clone [your-repo-url] fresco-texture
 
-# Create symbolic links to Inkscape extensions directory
-# For Snap version of Inkscape:
-ln -s ~/Code/Inkscape/fresco-texture/fresco_texture.inx ~/snap/inkscape/common/extensions/fresco_texture.inx
-ln -s ~/Code/Inkscape/fresco-texture/fresco_texture.py ~/snap/inkscape/common/extensions/fresco_texture.py
-
-# For regular Inkscape installation:
-ln -s ~/Code/Inkscape/fresco-texture/fresco_texture.inx ~/.config/inkscape/extensions/fresco_texture.inx
-ln -s ~/Code/Inkscape/fresco-texture/fresco_texture.py ~/.config/inkscape/extensions/fresco_texture.py
-```
-
-### Method 2: Direct Copy
-
-Copy both `fresco_texture.inx` and `fresco_texture.py` to your Inkscape extensions directory:
-
-**Snap version:**
-
-```bash
-cp fresco_texture.* ~/snap/inkscape/common/extensions/
+# Copy files to Inkscape extensions directory
+cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/snap/inkscape/common/extensions/
 chmod +x ~/snap/inkscape/common/extensions/fresco_texture.py
 ```
 
-**Regular installation:**
+### For Regular Inkscape Installation
 
 ```bash
-cp fresco_texture.* ~/.config/inkscape/extensions/
+# Clone or download
+cd ~/Code/Inkscape
+git clone [your-repo-url] fresco-texture
+
+# Copy files to extensions directory
+cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/.config/inkscape/extensions/
 chmod +x ~/.config/inkscape/extensions/fresco_texture.py
 ```
 
 Restart Inkscape after installation.
+
+## Development Workflow
+
+A sync script is provided to simplify development:
+
+```bash
+cat > ~/Code/Inkscape/fresco-texture/sync.sh << 'EOF'
+#!/bin/bash
+# For Snap version
+cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/snap/inkscape/common/extensions/
+
+# Uncomment for regular installation instead:
+# cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/.config/inkscape/extensions/
+
+echo "Files synced to Inkscape extensions"
+EOF
+
+chmod +x ~/Code/Inkscape/fresco-texture/sync.sh
+```
+
+After making changes:
+
+```bash
+cd ~/Code/Inkscape/fresco-texture
+./sync.sh
+```
+
+Then restart Inkscape to see changes.
 
 ## Usage
 
@@ -114,3 +133,29 @@ The extension generates a group of black spots as separate objects. You can then
 - Density: 1000
 - Clustering: 30%
 - Irregularity: 30%
+
+## Troubleshooting
+
+**Extension not appearing in menu:**
+
+- Verify files are in the correct extensions directory
+- Check file permissions: `chmod +x fresco_texture.py`
+- View Inkscape errors: `inkscape 2>&1 | grep fresco`
+- Clear Inkscape cache: `rm -rf ~/.cache/inkscape/`
+
+**Invalid XML error:**
+
+- Ensure no symbolic links with Snap version
+- Files must be direct copies in `~/snap/inkscape/common/extensions/`
+
+## License
+
+[Add your license here]
+
+## Author
+
+[Your name]
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues.
