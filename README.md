@@ -19,11 +19,11 @@ A parametric texture generator for Inkscape that creates authentic aging and wea
 
 ```bash
 # Clone or download to your preferred location
-cd ~/Code/Inkscape
-git clone [your-repo-url] timeworn
+git clone [your-repo-url] inkscape-timeworn
+cd inkscape-timeworn
 
 # Copy files to Inkscape extensions directory
-cp ~/Code/Inkscape/timeworn/timeworn.* ~/snap/inkscape/common/extensions/
+cp timeworn.* ~/snap/inkscape/common/extensions/
 chmod +x ~/snap/inkscape/common/extensions/timeworn.py
 ```
 
@@ -31,11 +31,11 @@ chmod +x ~/snap/inkscape/common/extensions/timeworn.py
 
 ```bash
 # Clone or download
-cd ~/Code/Inkscape
-git clone [your-repo-url] timeworn
+git clone [your-repo-url] inkscape-timeworn
+cd inkscape-timeworn
 
 # Copy files to extensions directory
-cp ~/Code/Inkscape/timeworn/timeworn.* ~/.config/inkscape/extensions/
+cp timeworn.* ~/.config/inkscape/extensions/
 chmod +x ~/.config/inkscape/extensions/timeworn.py
 ```
 
@@ -43,27 +43,30 @@ Restart Inkscape after installation.
 
 ## Development Workflow
 
-A sync script is provided to simplify development:
+A sync script is provided to simplify development. In the project directory, create `sync.sh`:
 
 ```bash
-cat > ~/Code/Inkscape/timeworn/sync.sh << 'EOF'
 #!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # For Snap version
-cp ~/Code/Inkscape/timeworn/timeworn.* ~/snap/inkscape/common/extensions/
+cp "$SCRIPT_DIR"/timeworn.* ~/snap/inkscape/common/extensions/
 
 # Uncomment for regular installation instead:
-# cp ~/Code/Inkscape/timeworn/timeworn.* ~/.config/inkscape/extensions/
+# cp "$SCRIPT_DIR"/timeworn.* ~/.config/inkscape/extensions/
 
 echo "Files synced to Inkscape extensions"
-EOF
-
-chmod +x ~/Code/Inkscape/timeworn/sync.sh
 ```
 
-After making changes:
+Make it executable:
 
 ```bash
-cd ~/Code/Inkscape/timeworn
+chmod +x sync.sh
+```
+
+After making changes, run from the project directory:
+
+```bash
 ./sync.sh
 ```
 
