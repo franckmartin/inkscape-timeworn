@@ -18,6 +18,7 @@ MAX_CLUSTER_POINT_ATTEMPTS = 50
 class Timeworn(inkex.EffectExtension):
     
     def add_arguments(self, pars):
+        pars.add_argument("--tabs", default="objects")
         pars.add_argument("--density", type=int, default=200)
         pars.add_argument("--size_min", type=float, default=0.5)
         pars.add_argument("--size_max", type=float, default=3.0)

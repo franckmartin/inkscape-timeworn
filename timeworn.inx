@@ -2,27 +2,43 @@
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
     <name>Timeworn</name>
     <id>org.custom.timeworn</id>
-    
-    <label appearance="header">Object parameters</label>
-    <param name="size_min" type="float" min="0.1" max="20" gui-text="  Minimum size (mm):">0.5</param>
-    <param name="size_max" type="float" min="0.1" max="50" gui-text="  Maximum size (mm):">3.0</param>
-    <param name="shape_type" type="optiongroup" appearance="combo" gui-text="  Shape type:">
-        <option value="organic">Organic blobs</option>
-        <option value="angular">Angular fragments</option>
-        <option value="mixed">Mixed</option>
+
+    <param name="tabs" type="notebook">
+        <page name="objects" gui-text="Objects">
+            <label appearance="header">Size</label>
+            <param name="size_min" type="float" min="0.1" max="20" gui-text="Minimum (mm):" gui-description="Smallest spot diameter in millimeters">0.5</param>
+            <param name="size_max" type="float" min="0.1" max="50" gui-text="Maximum (mm):" gui-description="Largest spot diameter in millimeters">3.0</param>
+
+            <separator/>
+
+            <label appearance="header">Shape</label>
+            <param name="shape_type" type="optiongroup" appearance="combo" gui-text="Type:" gui-description="Visual style of generated spots">
+                <option value="organic">Organic blobs</option>
+                <option value="angular">Angular fragments</option>
+                <option value="mixed">Mixed</option>
+            </param>
+            <param name="irregularity" type="int" min="0" max="100" gui-text="Irregularity (%):" gui-description="Border variation: 0=smooth edges, 100=very chaotic borders">50</param>
+
+            <separator/>
+
+            <label appearance="header">Elongation</label>
+            <param name="elongation" type="float" min="1.0" max="5.0" gui-text="Factor:" gui-description="Stretch ratio: 1.0=circular, 5.0=highly elongated">1.5</param>
+            <param name="elongation_variation" type="int" min="0" max="100" gui-text="Factor variation (%):" gui-description="Random variation in elongation per spot">30</param>
+            <param name="elongation_angle" type="float" min="0" max="360" gui-text="Angle (°):" gui-description="Main elongation direction: 0=horizontal, 90=vertical">45</param>
+            <param name="angle_variation" type="int" min="0" max="100" gui-text="Angle variation (%):" gui-description="Random variation in direction per spot">30</param>
+        </page>
+
+        <page name="distribution" gui-text="Distribution">
+            <label appearance="header">Density</label>
+            <param name="density" type="int" min="10" max="1000" gui-text="Number of spots:" gui-description="Total spots to generate (10-1000)">200</param>
+
+            <separator/>
+
+            <label appearance="header">Clustering</label>
+            <param name="clustering" type="int" min="0" max="100" gui-text="Clustering (%):" gui-description="Tendency to group spots: 0=uniform distribution, 100=strong clusters">30</param>
+            <param name="num_clusters" type="int" min="1" max="20" gui-text="Number of clusters:" gui-description="How many cluster centers to create when clustering is enabled">5</param>
+        </page>
     </param>
-    <param name="irregularity" type="int" min="0" max="100" gui-text="  Irregularity (%):">50</param>
-    
-    <label appearance="header">Distribution parameters</label>
-    <param name="density" type="int" min="10" max="1000" gui-text="  Density (number):">200</param>
-    <param name="clustering" type="int" min="0" max="100" gui-text="  Clustering (%):">30</param>
-    <param name="num_clusters" type="int" min="1" max="20" gui-text="  Number of clusters:">5</param>
-    
-    <label appearance="header">Elongation parameters</label>
-    <param name="elongation" type="float" min="1.0" max="5.0" gui-text="  Factor:">1.5</param>
-    <param name="elongation_variation" type="int" min="0" max="100" gui-text="  Factor variation (%):">30</param>
-    <param name="elongation_angle" type="float" min="0" max="360" gui-text="  Angle (°):">45</param>
-    <param name="angle_variation" type="int" min="0" max="100" gui-text="  Angle variation (%):">30</param>
     
     <effect>
         <object-type>path</object-type>
