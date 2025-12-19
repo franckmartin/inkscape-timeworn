@@ -9,6 +9,18 @@
 
 The extension generates a group of black spots as separate objects within the selected shape.
 
+## Shape-Aware Distribution
+
+Timeworn uses intelligent shape-aware distribution to ensure all spots stay within your selected path boundaries:
+
+- **Respects actual shape**: Spots are confined to the exact shape, not just the bounding box
+- **Handles complex paths**: Works with circles, curves, and complex organic shapes
+- **Supports compound paths**: Correctly handles shapes with holes (like donuts or rings)
+- **Preserves clustering**: Natural clustering behavior is maintained while respecting boundaries
+- **Exact density**: The specified number of spots will be placed within the shape
+
+This means you can use any closed path as a boundary - circles, stars, custom shapes, or even shapes with cutouts - and the texture will conform perfectly to your design.
+
 ## Working with the Output
 
 ### Merging Spots

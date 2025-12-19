@@ -48,6 +48,9 @@ The algorithm normalizes irregularity to maintain consistent average spot size r
 - Medium density (200-500): Balanced coverage
 - High density (500-1000): Dense, intense weathering
 
+!!! info "Shape-Aware Distribution"
+    Spots are intelligently placed within the actual shape boundaries, not just the bounding box. The extension uses a coverage grid and ray-casting algorithm to ensure all spots stay inside your selected path, even for complex shapes with curves or holes.
+
 ### Clustering
 
 **Clustering (%)**

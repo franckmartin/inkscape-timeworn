@@ -7,6 +7,7 @@ A parametric texture generator for Inkscape that creates authentic weathered and
 
 ## Features
 
+- **Shape-aware distribution** - Spots conform to any path shape, including curves and holes
 - **Parametric control** - Adjust size, density, irregularity, clustering, and elongation
 - **Organic shapes** - Generate smooth blobs or angular fragments
 - **Realistic clustering** - Non-uniform distribution patterns
