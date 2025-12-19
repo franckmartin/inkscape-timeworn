@@ -1,0 +1,71 @@
+site_name: Timeworn - Inkscape Extension
+site_description: Create authentic weathered and aged texture effects in Inkscape
+site_author: Franck Martin
+site_url: https://franckmartin.github.io/inkscape-timeworn/
+
+repo_name: franckmartin/inkscape-timeworn
+repo_url: https://github.com/franckmartin/inkscape-timeworn
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: installation.md
+    - Quick Start: usage.md
+  - Reference:
+    - Parameters: parameters.md
+    - Examples: examples.md
+  - Help:
+    - Troubleshooting: troubleshooting.md
+    - Development: development.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/franckmartin/inkscape-timeworn
