@@ -17,7 +17,160 @@ class Timeworn(inkex.EffectExtension):
         pars.add_argument("--elongation_variation", type=int, default=30)
         pars.add_argument("--elongation_angle", type=float, default=45.0)
         pars.add_argument("--angle_variation", type=int, default=30)
-    
+
+    def flatten_bezier(self, p0, p1, p2, p3, segments=8):
+        """Flatten a cubic Bézier curve into line segments"""
+        points = []
+        for i in range(segments + 1):
+            t = i / segments
+            # Cubic Bézier formula
+            t2 = t * t
+            t3 = t2 * t
+            mt = 1 - t
+            mt2 = mt * mt
+            mt3 = mt2 * mt
+
+            x = mt3 * p0[0] + 3 * mt2 * t * p1[0] + 3 * mt * t2 * p2[0] + t3 * p3[0]
+            y = mt3 * p0[1] + 3 * mt2 * t * p1[1] + 3 * mt * t2 * p2[1] + t3 * p3[1]
+            points.append((x, y))
+        return points
+
+    def point_in_path(self, x, y, path_element):
+        """Test if point (x,y) is inside the path using ray-casting algorithm"""
+        # Get path as superpath for predictable format
+        path = path_element.path.to_superpath()
+
+        # Flatten path to line segments
+        segments = []
+        for subpath in path:
+            for i in range(len(subpath)):
+                # Each segment in superpath is ((x,y), (cp1_x, cp1_y), (cp2_x, cp2_y))
+                # Next point is at index (i+1) % len
+                current = subpath[i]
+                next_idx = (i + 1) % len(subpath)
+                if next_idx == 0 and i == len(subpath) - 1:
+                    # Close path - connect last to first
+                    next_point = subpath[0]
+                else:
+                    next_point = subpath[next_idx]
+
+                # Current point, control points, next point
+                p0 = (current[1][0], current[1][1])  # current point
+                p1 = (current[2][0], current[2][1])  # control point 1
+                p2 = (next_point[0][0], next_point[0][1])  # control point 2
+                p3 = (next_point[1][0], next_point[1][1])  # next point
+
+                # Flatten bezier to line segments
+                flattened = self.flatten_bezier(p0, p1, p2, p3, segments=8)
+                for j in range(len(flattened) - 1):
+                    segments.append((flattened[j], flattened[j + 1]))
+
+        # Ray casting: count intersections with horizontal ray from point
+        intersections = 0
+        for seg_start, seg_end in segments:
+            x1, y1 = seg_start
+            x2, y2 = seg_end
+
+            # Check if segment crosses the horizontal ray from (x, y) to the right
+            if y1 == y2:  # Horizontal segment, skip
+                continue
+
+            # Check if ray is within segment's y range
+            if not (min(y1, y2) < y <= max(y1, y2)):
+                continue
+
+            # Calculate x coordinate of intersection
+            x_intersect = x1 + (y - y1) * (x2 - x1) / (y2 - y1)
+
+            # Count if intersection is to the right of point
+            if x_intersect > x:
+                intersections += 1
+
+        # Odd number of intersections = inside (even-odd rule)
+        return intersections % 2 == 1
+
+    def create_coverage_grid(self, bbox, path_element, cell_size_mm=5.0):
+        """
+        Create coverage grid with fixed cell size.
+        Returns: (grid, grid_cols, grid_rows, cell_width, cell_height)
+        Grid values: 0=empty, 1=partial, 2=full
+        """
+        x_min, y_min = bbox.left, bbox.top
+        width, height = bbox.width, bbox.height
+
+        # Convert cell size to user units
+        cell_size = self.svg.unittouu(f"{cell_size_mm}mm")
+
+        # Calculate grid dimensions
+        grid_cols = max(1, int(width / cell_size))
+        grid_rows = max(1, int(height / cell_size))
+
+        # Actual cell dimensions
+        cell_width = width / grid_cols
+        cell_height = height / grid_rows
+
+        # Initialize grid
+        grid = [[0 for _ in range(grid_cols)] for _ in range(grid_rows)]
+
+        # Sample each cell to determine coverage
+        samples_per_cell = 12
+        for row in range(grid_rows):
+            for col in range(grid_cols):
+                # Cell bounds
+                cell_x_min = x_min + col * cell_width
+                cell_y_min = y_min + row * cell_height
+
+                # Sample points in cell
+                inside_count = 0
+                for _ in range(samples_per_cell):
+                    sample_x = cell_x_min + random.uniform(0, cell_width)
+                    sample_y = cell_y_min + random.uniform(0, cell_height)
+
+                    if self.point_in_path(sample_x, sample_y, path_element):
+                        inside_count += 1
+
+                # Classify cell
+                coverage = inside_count / samples_per_cell
+                if coverage == 0:
+                    grid[row][col] = 0  # empty
+                elif coverage >= 0.9:
+                    grid[row][col] = 2  # full
+                else:
+                    grid[row][col] = 1  # partial
+
+        return grid, grid_cols, grid_rows, cell_width, cell_height
+
+    def generate_valid_point(self, x_min, y_min, grid, grid_cols, grid_rows, cell_width, cell_height, elem, max_retries=50):
+        """Generate a point inside the shape using grid-guided sampling"""
+        # Build list of cells weighted by coverage
+        weighted_cells = []
+        for row in range(grid_rows):
+            for col in range(grid_cols):
+                if grid[row][col] == 2:  # full cell
+                    # Add multiple times for higher probability
+                    weighted_cells.extend([(row, col)] * 3)
+                elif grid[row][col] == 1:  # partial cell
+                    weighted_cells.append((row, col))
+
+        if not weighted_cells:
+            # Fallback to random (shouldn't happen)
+            return None, None
+
+        for attempt in range(max_retries):
+            # Pick cell
+            row, col = random.choice(weighted_cells)
+
+            # Generate point in cell
+            x = x_min + col * cell_width + random.uniform(0, cell_width)
+            y = y_min + row * cell_height + random.uniform(0, cell_height)
+
+            # Test if in path (always test partial cells, skip test for full cells)
+            if grid[row][col] == 2 or self.point_in_path(x, y, elem):
+                return x, y
+
+        # Failed to find valid point
+        return None, None
+
     def effect(self):
         # Get selected path
         if not self.svg.selected:
@@ -34,7 +187,10 @@ class Timeworn(inkex.EffectExtension):
         
         x_min, y_min = bbox.left, bbox.top
         width, height = bbox.width, bbox.height
-        
+
+        # Create coverage grid for shape-aware distribution
+        grid, grid_cols, grid_rows, cell_width, cell_height = self.create_coverage_grid(bbox, elem)
+
         # Convert mm to user units using Inkscape's unit conversion
         size_min = self.svg.unittouu(f"{self.options.size_min}mm")
         size_max = self.svg.unittouu(f"{self.options.size_max}mm")
@@ -53,42 +209,68 @@ class Timeworn(inkex.EffectExtension):
         # Create group for all spots
         group = elem.getparent().add(inkex.Group())
         
-        # Generate cluster centers
+        # Generate cluster centers (only in non-empty cells)
         clusters = []
-        for _ in range(num_clusters):
-            cx = x_min + random.uniform(0, width)
-            cy = y_min + random.uniform(0, height)
-            # Smaller, more concentrated clusters at high clustering values
-            cluster_radius = min(width, height) * random.uniform(0.05, 0.15) * (1.5 - clustering)
-            # Each cluster gets a weight/density
-            cluster_weight = random.uniform(0.5, 2.0)
-            clusters.append((cx, cy, cluster_radius, cluster_weight))
+        # Find non-empty cells for cluster placement
+        non_empty_cells = []
+        for row in range(grid_rows):
+            for col in range(grid_cols):
+                if grid[row][col] > 0:  # partial or full
+                    non_empty_cells.append((row, col))
+
+        if non_empty_cells:
+            for _ in range(num_clusters):
+                # Pick random non-empty cell
+                row, col = random.choice(non_empty_cells)
+                # Place cluster center in cell
+                cx = x_min + col * cell_width + random.uniform(0, cell_width)
+                cy = y_min + row * cell_height + random.uniform(0, cell_height)
+                # Smaller, more concentrated clusters at high clustering values
+                cluster_radius = min(width, height) * random.uniform(0.05, 0.15) * (1.5 - clustering)
+                # Each cluster gets a weight/density
+                cluster_weight = random.uniform(0.5, 2.0)
+                clusters.append((cx, cy, cluster_radius, cluster_weight))
         
         # Generate spots
         for i in range(density):
             # Determine if this spot is clustered based on clustering parameter
             use_cluster = random.random() < (clustering ** 0.5)  # Non-linear for stronger effect
-            
+
+            x, y = None, None
+            max_attempts = 50
+
             if use_cluster and clusters:
-                # Choose cluster with weighted probability
-                weights = [c[3] for c in clusters]
-                cluster = random.choices(clusters, weights=weights)[0]
-                
-                # Position within cluster using exponential distribution (more concentrated at center)
-                dist_factor = random.expovariate(2.0)  # Exponential distribution
-                dist = min(cluster[2] * dist_factor, cluster[2])
-                angle = random.uniform(0, 2 * math.pi)
-                
-                x = cluster[0] + dist * math.cos(angle)
-                y = cluster[1] + dist * math.sin(angle)
-                
-                # Clamp to bounding box
-                x = max(x_min, min(x_min + width, x))
-                y = max(y_min, min(y_min + height, y))
-            else:
-                # Random uniform position
-                x = x_min + random.uniform(0, width)
-                y = y_min + random.uniform(0, height)
+                # Try clustered distribution with shape constraint
+                for attempt in range(max_attempts):
+                    # Choose cluster with weighted probability
+                    weights = [c[3] for c in clusters]
+                    cluster = random.choices(clusters, weights=weights)[0]
+
+                    # Position within cluster using exponential distribution
+                    dist_factor = random.expovariate(2.0)
+                    dist = min(cluster[2] * dist_factor, cluster[2])
+                    angle = random.uniform(0, 2 * math.pi)
+
+                    test_x = cluster[0] + dist * math.cos(angle)
+                    test_y = cluster[1] + dist * math.sin(angle)
+
+                    # Clamp to bounding box
+                    test_x = max(x_min, min(x_min + width, test_x))
+                    test_y = max(y_min, min(y_min + height, test_y))
+
+                    # Check if point is in shape
+                    if self.point_in_path(test_x, test_y, elem):
+                        x, y = test_x, test_y
+                        break
+
+            # Fallback to uniform distribution if clustering failed or not clustering
+            if x is None:
+                x, y = self.generate_valid_point(x_min, y_min, grid, grid_cols, grid_rows,
+                                                   cell_width, cell_height, elem)
+
+            # Skip this spot if we couldn't find a valid position
+            if x is None or y is None:
+                continue
             
             # Random size
             size = random.uniform(size_min, size_max)
