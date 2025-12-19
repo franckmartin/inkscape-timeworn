@@ -1,0 +1,15 @@
+# Configuration Claude Code pour le projet
+
+## Règles Git
+
+- Utiliser TOUJOURS le format Conventional Commits (type(scope): description)
+- Types autorisés : feat, fix, docs, style, refactor, test, chore
+- NE JAMAIS ajouter "Co-authored-by: Claude"
+- Messages de commit en anglais
+- Description courte (max 72 caractères) et claire
+
+## Exemples de commits
+
+- feat(export): ajout export SVG optimisé
+- fix(ui): correction alignement panneau
+- docs(readme): mise à jour installation
