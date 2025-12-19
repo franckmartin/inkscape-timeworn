@@ -2,6 +2,7 @@ site_name: Timeworn - Inkscape Extension
 site_description: Create authentic weathered and aged texture effects in Inkscape
 site_author: Franck Martin
 site_url: https://franckmartin.github.io/inkscape-timeworn/
+copyright: Bring age and character to your designs with parametric weathered textures
 
 repo_name: franckmartin/inkscape-timeworn
 repo_url: https://github.com/franckmartin/inkscape-timeworn
@@ -71,6 +72,7 @@ nav:
     - Development: development.md
 
 extra:
+  generator: false
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/franckmartin/inkscape-timeworn
