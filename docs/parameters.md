@@ -1,6 +1,8 @@
 # Parameters Reference
 
-## Object Parameters
+The extension interface is organized into two tabs: **Objects** (controlling spot appearance) and **Distribution** (controlling placement and density).
+
+## Objects Tab
 
 ### Size
 
@@ -35,9 +37,48 @@ Controls border variation and shape complexity.
 
 The algorithm normalizes irregularity to maintain consistent average spot size regardless of this parameter.
 
+### Elongation
+
+Controls spot stretching and directional effects.
+
+**Factor**
+
+Elongation ratio for stretching spots.
+
+- `1.0` - Circular/non-elongated (default)
+- `2.0` - Moderately stretched
+- `5.0` - Highly elongated
+
+**Factor Variation (%)**
+
+Random variation in elongation per spot.
+
+- `0%` - All spots use same elongation factor
+- `50%` - Moderate variation
+- `100%` - High variation, each spot stretched differently
+
+**Angle**
+
+Main elongation direction in degrees.
+
+- `0°` - Horizontal elongation
+- `90°` - Vertical elongation
+- Custom angles for directional weathering effects
+
+**Angle Variation (%)**
+
+Random variation in elongation direction per spot.
+
+- `0%` - All spots aligned to same angle
+- `50%` - Moderate directional variation
+- `100%` - Each spot can point in any direction
+
+!!! tip "Realistic Weathering"
+    For rain damage patterns, use: angle=90°, factor=2.5, angle variation=20%
+
 ---
 
-## Distribution Parameters
+## Distribution Tab
 
 ### Density
 
@@ -73,46 +114,3 @@ Uses exponential distribution to create realistic non-uniform patterns.
 
 !!! note
     This parameter only affects distribution when Clustering % > 0
-
----
-
-## Elongation Parameters
-
-### Factor
-
-**Elongation ratio** for stretching spots.
-
-- `1.0` - Circular/non-elongated (default)
-- `2.0` - Moderately stretched
-- `5.0` - Highly elongated
-
-### Factor Variation
-
-**Factor variation (%)**
-
-Random variation in elongation per spot.
-
-- `0%` - All spots use same elongation factor
-- `50%` - Moderate variation
-- `100%` - High variation, each spot stretched differently
-
-### Angle
-
-**Main elongation direction** in degrees.
-
-- `0°` - Horizontal elongation
-- `90°` - Vertical elongation
-- Custom angles for directional weathering effects
-
-### Angle Variation
-
-**Angle variation (%)**
-
-Random variation in elongation direction per spot.
-
-- `0%` - All spots aligned to same angle
-- `50%` - Moderate directional variation
-- `100%` - Each spot can point in any direction
-
-!!! tip "Realistic Weathering"
-    For rain damage patterns, use: angle=90°, factor=2.5, angle variation=20%

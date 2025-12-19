@@ -96,7 +96,7 @@ inkscape-timeworn/
 
 **`timeworn.py`**
 
-- `TimewornEffect` class extends `inkex.EffectExtension`
+- `Timeworn` class extends `inkex.EffectExtension`
 - `add_arguments()` - Defines command-line parameters
 - `effect()` - Main execution logic
 - Helper methods for shape generation and distribution

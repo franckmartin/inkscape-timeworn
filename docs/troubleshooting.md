@@ -86,14 +86,6 @@ The extension requires a **closed path** to be selected:
 
 ---
 
-## Spots Appear Outside Boundary
-
-This is expected behavior. The extension uses the selected shape as a general boundary, but spots may slightly overlap the edges due to their size and positioning algorithm.
-
-**Workaround:** Make your boundary shape slightly larger than needed, then trim after generation.
-
----
-
 ## Performance Issues
 
 ### Large Density Values
