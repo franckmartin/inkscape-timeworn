@@ -1,6 +1,6 @@
-# Fresco Texture - Inkscape Extension
+# Timeworn - Inkscape Extension
 
-A parametric texture generator for Inkscape that creates weathered fresco effects with organic, irregularly distributed spots simulating paint deterioration on ancient frescoes.
+A parametric texture generator for Inkscape that creates authentic aging and weathered effects with organic, irregularly distributed spots simulating paint deterioration on ancient surfaces.
 
 ## Features
 
@@ -20,11 +20,11 @@ A parametric texture generator for Inkscape that creates weathered fresco effect
 ```bash
 # Clone or download to your preferred location
 cd ~/Code/Inkscape
-git clone [your-repo-url] fresco-texture
+git clone [your-repo-url] timeworn
 
 # Copy files to Inkscape extensions directory
-cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/snap/inkscape/common/extensions/
-chmod +x ~/snap/inkscape/common/extensions/fresco_texture.py
+cp ~/Code/Inkscape/timeworn/timeworn.* ~/snap/inkscape/common/extensions/
+chmod +x ~/snap/inkscape/common/extensions/timeworn.py
 ```
 
 ### For Regular Inkscape Installation
@@ -32,11 +32,11 @@ chmod +x ~/snap/inkscape/common/extensions/fresco_texture.py
 ```bash
 # Clone or download
 cd ~/Code/Inkscape
-git clone [your-repo-url] fresco-texture
+git clone [your-repo-url] timeworn
 
 # Copy files to extensions directory
-cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/.config/inkscape/extensions/
-chmod +x ~/.config/inkscape/extensions/fresco_texture.py
+cp ~/Code/Inkscape/timeworn/timeworn.* ~/.config/inkscape/extensions/
+chmod +x ~/.config/inkscape/extensions/timeworn.py
 ```
 
 Restart Inkscape after installation.
@@ -46,24 +46,24 @@ Restart Inkscape after installation.
 A sync script is provided to simplify development:
 
 ```bash
-cat > ~/Code/Inkscape/fresco-texture/sync.sh << 'EOF'
+cat > ~/Code/Inkscape/timeworn/sync.sh << 'EOF'
 #!/bin/bash
 # For Snap version
-cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/snap/inkscape/common/extensions/
+cp ~/Code/Inkscape/timeworn/timeworn.* ~/snap/inkscape/common/extensions/
 
 # Uncomment for regular installation instead:
-# cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/.config/inkscape/extensions/
+# cp ~/Code/Inkscape/timeworn/timeworn.* ~/.config/inkscape/extensions/
 
 echo "Files synced to Inkscape extensions"
 EOF
 
-chmod +x ~/Code/Inkscape/fresco-texture/sync.sh
+chmod +x ~/Code/Inkscape/timeworn/sync.sh
 ```
 
 After making changes:
 
 ```bash
-cd ~/Code/Inkscape/fresco-texture
+cd ~/Code/Inkscape/timeworn
 ./sync.sh
 ```
 
@@ -72,7 +72,7 @@ Then restart Inkscape to see changes.
 ## Usage
 
 1. Create or select a closed path (rectangle, circle, or any shape)
-2. Go to **Extensions > Render > Fresco Texture**
+2. Go to **Extensions > Render > Timeworn**
 3. Adjust parameters to achieve desired effect
 4. Click **Apply**
 
@@ -139,8 +139,8 @@ The extension generates a group of black spots as separate objects. You can then
 **Extension not appearing in menu:**
 
 - Verify files are in the correct extensions directory
-- Check file permissions: `chmod +x fresco_texture.py`
-- View Inkscape errors: `inkscape 2>&1 | grep fresco`
+- Check file permissions: `chmod +x timeworn.py`
+- View Inkscape errors: `inkscape 2>&1 | grep timeworn`
 - Clear Inkscape cache: `rm -rf ~/.cache/inkscape/`
 
 **Invalid XML error:**

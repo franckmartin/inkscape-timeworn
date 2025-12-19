@@ -3,7 +3,7 @@ import inkex
 import random
 import math
 
-class FrescoTexture(inkex.EffectExtension):
+class Timeworn(inkex.EffectExtension):
     
     def add_arguments(self, pars):
         pars.add_argument("--density", type=int, default=200)
@@ -211,4 +211,4 @@ class FrescoTexture(inkex.EffectExtension):
         return path
 
 if __name__ == '__main__':
-    FrescoTexture().run()
+    Timeworn().run()

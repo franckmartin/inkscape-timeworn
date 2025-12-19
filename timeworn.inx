@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-    <name>Fresco Texture</name>
-    <id>org.custom.fresco_texture</id>
+    <name>Timeworn</name>
+    <id>org.custom.timeworn</id>
     
     <label appearance="header">Object parameters</label>
     <param name="size_min" type="float" min="0.1" max="20" gui-text="  Minimum size (mm):">0.5</param>
@@ -32,6 +32,6 @@
     </effect>
     
     <script>
-        <command location="inx" interpreter="python">fresco_texture.py</command>
+        <command location="inx" interpreter="python">timeworn.py</command>
     </script>
 </inkscape-extension>

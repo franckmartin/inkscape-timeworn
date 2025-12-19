@@ -1,10 +1,10 @@
-# Fresco Texture - Inkscape Extension
+# Timeworn - Inkscape Extension
 
-Inkscape extension for creating fresco-style textures with artistic effects.
+Inkscape extension for creating timeworn textures with weathered, aged effects.
 
 ## Project Context
 
-This extension allows Inkscape users to transform their creations into textures inspired by classical frescoes, applying characteristic aging and texture effects.
+This extension allows Inkscape users to add authentic aging and deterioration effects to their creations, simulating the weathered appearance of ancient surfaces with organic spot patterns that mimic paint deterioration over time.
 
 ## Language Rule
 

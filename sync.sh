@@ -1,3 +1,3 @@
 #!/bin/bash
-cp ~/Code/Inkscape/fresco-texture/fresco_texture.* ~/snap/inkscape/common/extensions/
+cp ~/Code/Inkscape/timeworn/timeworn.* ~/snap/inkscape/common/extensions/
 echo "Files synced to Inkscape extensions"
